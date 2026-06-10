@@ -985,6 +985,13 @@ async def process_card_async(cc, mes, ano, cvv, site_url, variant_id=None, proxy
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return jsonify({
+        "status": True,
+        "message": "Shopify Card Checker API is running. Use the /shopify endpoint."
+    })
+
 @app.route('/shopify', methods=['GET'])
 def shopify_checker():
     try:
@@ -1057,4 +1064,5 @@ def shopify_checker():
         }), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
