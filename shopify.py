@@ -992,6 +992,33 @@ def home():
         "message": "Shopify Card Checker API is running. Use the /shopify endpoint."
     })
 
+@app.route('/test-telegram', methods=['GET'])
+def test_telegram():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(
+            send_telegram_log_async(
+                site="test-shop.myshopify.com",
+                cc_string="4111222233334444|12|2030|123",
+                gateway="shopify_payments",
+                price="1.00",
+                currency="USD",
+                proxy_str="None"
+            )
+        )
+        return jsonify({
+            "status": True,
+            "message": "Test Telegram message triggered. Please check your Telegram chat!"
+        })
+    except Exception as e:
+        return jsonify({
+            "status": False,
+            "error": f"Failed to send: {str(e)}"
+        }), 500
+    finally:
+        loop.close()
+
 @app.route('/shopify', methods=['GET'])
 def shopify_checker():
     try:
